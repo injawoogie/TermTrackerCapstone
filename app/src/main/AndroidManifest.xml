@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.termtracker">
+    package="com.example.termtracker" >
 
     <application
         android:allowBackup="true"
@@ -12,10 +12,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TermTracker"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".UI.AssessmentList"
+            android:label="Assessment List"
+            android:parentActivityName=".UI.CourseList"
+            android:exported="false" />
+        <activity
+            android:name=".UI.CourseList"
+            android:label="Course List"
+            android:parentActivityName=".UI.TermList"
+            android:exported="false" />
+        <activity
+            android:name=".UI.TermList"
+            android:label="Term List"
+            android:exported="false"
+            android:parentActivityName=".UI.MainActivity" />
+        <activity
+            android:name=".UI.MainActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
