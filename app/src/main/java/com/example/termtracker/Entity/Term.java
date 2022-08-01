@@ -11,11 +11,10 @@ public class Term {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
-    private int startDate;
-    private int endDate;
+    private String startDate;
+    private String endDate;
 
-    public Term(int id, String title, int startDate, int endDate) {
-        this.id = id;
+    public Term(String title, String startDate, String endDate) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -43,19 +42,19 @@ public class Term {
         this.title = title;
     }
 
-    public int getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(int startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public int getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(int endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

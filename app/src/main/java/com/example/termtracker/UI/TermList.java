@@ -10,13 +10,19 @@ import android.view.View;
 
 import com.example.termtracker.R;
 
+import java.util.Objects;
+
 public class TermList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
+
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

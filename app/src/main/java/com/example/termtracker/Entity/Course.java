@@ -7,22 +7,29 @@ import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 
-@Entity(tableName = "course")
+@Entity(tableName = "course", foreignKeys = {@ForeignKey(entity = Instructor.class, parentColumns = "id", childColumns = "instructor_id", onDelete = ForeignKey.CASCADE)})
 public class Course {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
-    private int startDate;
-    private int endDate;
+    private String startDate;
+    private String endDate;
     private String status;
+    private int instructor_id;
 
-    public Course(int id, String title, int startDate, int endDate, String status) {
-        this.id = id;
+    // Status options (in progress, completed, dropped, plan to take)
+    public static final String IN_PROGRESS = "in progress";
+    public static final String COMPLETED = "completed";
+    public static final String DROPPED = "dropped";
+    public static final String PLAN_TO_TAKE = "plan to take";
+
+    public Course(String title, String startDate, String endDate, String status, int instructor_id) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.instructor_id = instructor_id;
     }
 
     @NonNull
@@ -47,19 +54,19 @@ public class Course {
         this.title = title;
     }
 
-    public int getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(int startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public int getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(int endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -69,5 +76,13 @@ public class Course {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getInstructor_id() {
+        return instructor_id;
+    }
+
+    public void setInstructor_id(int instructor_id) {
+        this.instructor_id = instructor_id;
     }
 }

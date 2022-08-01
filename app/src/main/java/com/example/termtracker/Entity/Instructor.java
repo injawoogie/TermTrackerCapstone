@@ -2,6 +2,7 @@ package com.example.termtracker.Entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "instructor")
@@ -13,8 +14,8 @@ public class Instructor {
     private String phone;
     private String email;
 
-    public Instructor(int id, String name, String phone, String email) {
-        this.id = id;
+
+    public Instructor(String name, String phone, String email) {
         this.name = name;
         this.phone = phone;
         this.email = email;
