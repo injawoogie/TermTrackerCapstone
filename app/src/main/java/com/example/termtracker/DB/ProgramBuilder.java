@@ -18,7 +18,7 @@ import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Instructor;
 import com.example.termtracker.Entity.Term;
 
-@Database(entities={Term.class, Course.class, Instructor.class}, version=4, exportSchema = false)
+@Database(entities={Term.class, Course.class, Instructor.class}, version=5, exportSchema = false)
 public abstract class ProgramBuilder extends RoomDatabase {
 
     public abstract TermDAO termDAO();
