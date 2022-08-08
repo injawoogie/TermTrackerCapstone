@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
+import java.util.Locale;
 
 @Entity(tableName = "term")
 public class Term {
@@ -23,8 +24,10 @@ public class Term {
     @NonNull
     @Override
     public String toString() {
-        return super.toString();
+//        return super.toString();
+        return String.format(Locale.ENGLISH, "Term ID: %d, Title: %s", id, title);
     }
+
 
     public int getId() {
         return id;

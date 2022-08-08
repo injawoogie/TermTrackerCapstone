@@ -10,11 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.termtracker.DB.Repository;
-import com.example.termtracker.Entity.Term;
+import com.example.termtracker.Database.Repository;
 import com.example.termtracker.R;
 
-import java.util.List;
 import java.util.Objects;
 
 public class TermList extends AppCompatActivity {
@@ -25,13 +23,17 @@ public class TermList extends AppCompatActivity {
         setContentView(R.layout.activity_term_list);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        RecyclerView recyclerView = findViewById(R.id.termRecyclerView);
+        // Set up recycler view
+        RecyclerView rView = findViewById(R.id.termRecyclerView);
+
+        // Grab new instance of Database
         Repository repo = new Repository(getApplication());
-        List<Term> terms = repo.getAllTerms();
-        final TermAdapter adapter = new TermAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter.setTerms(terms);
+
+        // Set up new instance of the adapter and set to recycler view
+        final TermAdapter tAdapter = new TermAdapter(this);
+        rView.setAdapter(tAdapter);
+        rView.setLayoutManager(new LinearLayoutManager(this));
+        tAdapter.setTerms(repo.getAllTerms());
 
     }
 
@@ -51,6 +53,7 @@ public class TermList extends AppCompatActivity {
     }
 
     public void toCourseList(View view) {
+        // TODO: Send to term detail view, not course list.
         Intent intent = new Intent(TermList.this, CourseList.class);
         startActivity(intent);
     }

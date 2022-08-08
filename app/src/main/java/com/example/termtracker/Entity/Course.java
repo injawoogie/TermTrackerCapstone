@@ -3,11 +3,18 @@ package com.example.termtracker.Entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 
-@Entity(tableName = "course", foreignKeys = {@ForeignKey(entity = Instructor.class, parentColumns = "id", childColumns = "instructor_id", onDelete = ForeignKey.CASCADE)})
+@Entity(tableName = "course",
+        foreignKeys = @ForeignKey(
+                entity = Instructor.class,
+                parentColumns = "id",
+                childColumns = "instructor_id",
+                onDelete = ForeignKey.CASCADE),
+        indices = @Index("instructor_id"))
 public class Course {
 
     @PrimaryKey(autoGenerate = true)
@@ -16,6 +23,7 @@ public class Course {
     private String startDate;
     private String endDate;
     private String status;
+
     private int instructor_id;
 
     // Status options (in progress, completed, dropped, plan to take)

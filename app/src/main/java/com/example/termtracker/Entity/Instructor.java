@@ -14,7 +14,6 @@ public class Instructor {
     private String phone;
     private String email;
 
-
     public Instructor(String name, String phone, String email) {
         this.name = name;
         this.phone = phone;

@@ -1,29 +1,25 @@
-package com.example.termtracker.DB;
+package com.example.termtracker.Database;
 
 import static androidx.room.Room.databaseBuilder;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
 import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.termtracker.DAO.CourseDAO;
-import com.example.termtracker.DAO.InstructorDAO;
-import com.example.termtracker.DAO.TermDAO;
+import com.example.termtracker.DAO.CourseDao;
+import com.example.termtracker.DAO.InstructorDao;
+import com.example.termtracker.DAO.TermDao;
 import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Instructor;
 import com.example.termtracker.Entity.Term;
 
-@Database(entities={Term.class, Course.class, Instructor.class}, version=5, exportSchema = false)
+@Database(entities={Term.class, Course.class, Instructor.class}, version=6, exportSchema = false)
 public abstract class ProgramBuilder extends RoomDatabase {
 
-    public abstract TermDAO termDAO();
-    public abstract CourseDAO courseDAO();
-    public abstract InstructorDAO instructorDAO();
+    public abstract TermDao termDAO();
+    public abstract CourseDao courseDAO();
+    public abstract InstructorDao instructorDAO();
 
     private static volatile ProgramBuilder INSTANCE;
 

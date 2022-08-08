@@ -7,24 +7,23 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.termtracker.Entity.Term;
+import com.example.termtracker.Entity.Course;
 
 import java.util.List;
 
 @Dao
-public interface TermDAO {
+public interface CourseDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Term term);
+    void insert(Course course);
 
     @Update
-    void update(Term term);
+    void update(Course course);
 
     @Delete
-    void delete(Term term);
+    void delete(Course course);
 
-    @Query("select * from term order by id asc")
-    List<Term> getAllTerms();
-
+    @Query("select * from course order by id asc")
+    List<Course> getAll();
 
 }
