@@ -8,18 +8,15 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import com.example.termtracker.DAO.CourseDao;
-import com.example.termtracker.DAO.InstructorDao;
 import com.example.termtracker.DAO.TermDao;
 import com.example.termtracker.Entity.Course;
-import com.example.termtracker.Entity.Instructor;
 import com.example.termtracker.Entity.Term;
 
-@Database(entities={Term.class, Course.class, Instructor.class}, version=6, exportSchema = false)
+@Database(entities={Term.class, Course.class}, version=9, exportSchema = false)
 public abstract class ProgramBuilder extends RoomDatabase {
 
     public abstract TermDao termDAO();
     public abstract CourseDao courseDAO();
-    public abstract InstructorDao instructorDAO();
 
     private static volatile ProgramBuilder INSTANCE;
 

@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.termtracker.Entity.Instructor;
 import com.example.termtracker.Entity.Term;
 
 import java.util.List;

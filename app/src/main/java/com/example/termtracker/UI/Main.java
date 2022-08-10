@@ -12,37 +12,41 @@ import com.example.termtracker.Helper.Utility;
 import com.example.termtracker.R;
 
 import com.example.termtracker.Database.Repository;
-import com.example.termtracker.Entity.Instructor;
 
 import java.time.LocalDate;
 
 public class Main extends AppCompatActivity {
 
+    public static int alertNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Repository repo = new Repository(getApplication());
-//        Instructor instructor = new Instructor("Instructor Name 1", "(520)555-5557", "instructor@email.com");
-//        System.out.println(instructor);
-//        System.out.println(repo.getInstructorBy(instructor.getName()));
 
-        // deletes the first instance
-//        repo.inOrUp(instructor);
+//        String title, String instructorName, String instructorEmail, String startDate, String endDate, String status, String note
+//        Course course = new Course(
+//                "Course 1",
+//                "Billy Bob",
+//                "billybob@wgu.edu",
+//                Utility.localDateToString(LocalDate.now()),
+//                Utility.localDateToString(LocalDate.now()),
+//                Course.IN_PROGRESS,
+//                "Some Notes go here."
+//                );
 //
-//        Instructor instructor5 = new Instructor("Instructor Name 5", "(520)555-5556", "instructor@email.com");
-//        repo.inOrUp(instructor5);
-//
-//        Instructor inst = repo.getInstructorBy(instructor5.getName());
-//
-//        Course course = new Course("Course 1", Utility.localDateToString(LocalDate.now()), Utility.localDateToString(LocalDate.now()), Course.IN_PROGRESS, inst.getId());
 //        repo.insert(course);
-//        repo.insert(instructor);
-
-//        Instructor instructor = repo.getInstructorByName("Instructor Name 1");
-//        System.out.println(instructor.getName());
-
+//
 //        repo.insert(new Term("Term Title", Utility.localDateToString(LocalDate.now()), Utility.localDateToString(LocalDate.now())));
-//        repo.insert(new Course("Course Title", Utility.localDateToString(LocalDate.now()), Utility.localDateToString(LocalDate.now()), Course.IN_PROGRESS, instructor.getId()));
+//        repo.insert(new Course(
+//                "Course 2",
+//                "Billy Bob Jr.",
+//                "billybobjr@wgu.edu",
+//                Utility.localDateToString(LocalDate.now()),
+//                Utility.localDateToString(LocalDate.now()),
+//                Course.IN_PROGRESS,
+//                "Some Notes go here."
+//                ));
 
         setContentView(R.layout.activity_main);
     }

@@ -10,11 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 import com.example.termtracker.R;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder>{
@@ -46,7 +44,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     final Term current = mTerms.get(position);
 
                     // Prepare information for next activity
-                    Intent intent = new Intent(context, CourseList.class);
+                    Intent intent = new Intent(context, TermDetail.class);
                     intent.putExtra("id", current.getId());
                     intent.putExtra("title", current.getTitle());
                     intent.putExtra("startDate", current.getStartDate());

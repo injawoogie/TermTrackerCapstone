@@ -2,4 +2,11 @@
     <string name="app_name">Term Tracker</string>
     <string name="main_screen_button_text">Enter</string>
     <string name="welcome_text">Welcome\nto\nTerm Tracker</string>
+    <string name="auto_generated">-auto generated-</string>
+    <string name="date_hint" >1970–01–01</string>
+    <string name="menu_item_name__share_notes">Share Notes</string>
+    <string name="menu_item_name__notify">Notify</string>
+    <string name="channel_name">noticeiver_channel</string>
+    <string name="channel_description">noticeiver_description</string>
+    <string name="notification_content_title">Term Tracker Notification</string>
 </resources>

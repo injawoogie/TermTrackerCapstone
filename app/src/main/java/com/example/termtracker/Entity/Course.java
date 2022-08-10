@@ -10,12 +10,19 @@ import java.time.LocalDate;
 
 @Entity(tableName = "course",
         foreignKeys = @ForeignKey(
-                entity = Instructor.class,
+                entity = Term.class,
                 parentColumns = "id",
-                childColumns = "instructor_id",
-                onDelete = ForeignKey.CASCADE),
-        indices = @Index("instructor_id"))
+                childColumns = "termIdFK",
+                onDelete = ForeignKey.CASCADE
+        ))
 public class Course {
+
+    // Status options (in progress, completed, dropped, plan to take)
+    public static final String IN_PROGRESS = "in progress";
+    public static final String COMPLETED = "completed";
+    public static final String DROPPED = "dropped";
+    public static final String PLAN_TO_TAKE = "plan to take";
+    public static final String[] statusAll = new String[] {IN_PROGRESS, COMPLETED, DROPPED, PLAN_TO_TAKE};
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -23,21 +30,20 @@ public class Course {
     private String startDate;
     private String endDate;
     private String status;
+    private String instructorName;
+    private String instructorEmail;
+    private String note;
+    private int termIdFK;
 
-    private int instructor_id;
-
-    // Status options (in progress, completed, dropped, plan to take)
-    public static final String IN_PROGRESS = "in progress";
-    public static final String COMPLETED = "completed";
-    public static final String DROPPED = "dropped";
-    public static final String PLAN_TO_TAKE = "plan to take";
-
-    public Course(String title, String startDate, String endDate, String status, int instructor_id) {
+    public Course(String title, String instructorName, String instructorEmail, String startDate, String endDate, String status, String note, int termIdFK) {
         this.title = title;
+        this.instructorName = instructorName;
+        this.instructorEmail = instructorEmail;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.instructor_id = instructor_id;
+        this.note = note;
+        this.termIdFK = termIdFK;
     }
 
     @NonNull
@@ -86,11 +92,35 @@ public class Course {
         this.status = status;
     }
 
-    public int getInstructor_id() {
-        return instructor_id;
+    public String getNote() {
+        return note;
     }
 
-    public void setInstructor_id(int instructor_id) {
-        this.instructor_id = instructor_id;
+    public void setNote(String notes) {
+        this.note = note;
+    }
+
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+
+    public String getInstructorEmail() {
+        return instructorEmail;
+    }
+
+    public void setInstructorEmail(String instructorEmail) {
+        this.instructorEmail = instructorEmail;
+    }
+
+    public int getTermIdFK() {
+        return termIdFK;
+    }
+
+    public void setTermIdFK(int termIdFK) {
+        this.termIdFK = termIdFK;
     }
 }

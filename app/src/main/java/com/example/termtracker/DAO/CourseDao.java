@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.termtracker.Entity.Course;
+import com.example.termtracker.Entity.Term;
 
 import java.util.List;
 
@@ -25,5 +26,20 @@ public interface CourseDao {
 
     @Query("select * from course order by id asc")
     List<Course> getAll();
+
+    @Query("select * from course where id = :id limit 1")
+    Course getCourseByID(int id);
+
+    default void inOrUp(Course course) {
+        Course found = getCourseByID(course.getId());
+        if (found == null) {
+            System.out.println("Course not found.");
+            insert(course);
+
+        } else {
+            System.out.println("Course found");
+            update(course);
+        }
+    }
 
 }

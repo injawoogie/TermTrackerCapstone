@@ -52,9 +52,9 @@ public class TermList extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void toCourseList(View view) {
+    public void toTermDetail(View view) {
         // TODO: Send to term detail view, not course list.
-        Intent intent = new Intent(TermList.this, CourseList.class);
+        Intent intent = new Intent(TermList.this, TermDetail.class);
         startActivity(intent);
     }
 }

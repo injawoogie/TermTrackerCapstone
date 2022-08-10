@@ -13,18 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TermTracker"
         tools:targetApi="31">
+
+        <receiver
+            android:name=".Helper.Noticeiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
         <activity
-            android:name=".UI.TermDetail"
-            android:exported="false" />
+            android:name=".UI.CourseDetail"
+            android:exported="false"
+            android:label="Course Details"
+            android:parentActivityName=".UI.TermDetail"/>
         <activity
             android:name=".UI.AssessmentList"
             android:exported="false"
             android:label="Assessment List"
-            android:parentActivityName=".UI.CourseList" />
+            android:parentActivityName=".UI.TermDetail" />
         <activity
-            android:name=".UI.CourseList"
+            android:name=".UI.TermDetail"
             android:exported="false"
-            android:label="Course List"
+            android:label="Term Details"
             android:parentActivityName=".UI.TermList" />
         <activity
             android:name=".UI.TermList"
