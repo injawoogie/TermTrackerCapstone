@@ -16,7 +16,7 @@ public class Noticeiver extends BroadcastReceiver {
 
     String CHANNEL_ID = "noticeiver";
     static int notificationId;
-    public static String CONTENT_KEY = "key";
+    public static String CONTENT_KEY = "notify";
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -10,42 +10,45 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.termtracker.Entity.Assessment;
+import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 import com.example.termtracker.R;
 
 import java.util.List;
 
-public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder>{
+public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>{
 
-    private List<Term> mTerms;
+    private List<Course> mCourses;
     private final Context context;
     private final LayoutInflater mInflater;
 
-    public void setTerms(List<Term> terms) {
-        this.mTerms = terms;
+    public void setCourses(List<Course> courses) {
+        this.mCourses = courses;
         notifyDataSetChanged();
     }
 
-    class TermViewHolder extends RecyclerView.ViewHolder {
+    class CourseViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView termItemView;
+        private final TextView courseItemView;
 
-        private TermViewHolder(View itemView){
+        private CourseViewHolder(View itemView){
             super(itemView);
-            termItemView=itemView.findViewById(R.id.itemTextView);
+            courseItemView =itemView.findViewById(R.id.itemTextView);
 
             // TODO: Make lambda
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    
+
                     int position = getAdapterPosition();
-                    final Term current = mTerms.get(position);
+                    final Course current = mCourses.get(position);
 
                     // Prepare information for next activity
-                    Intent intent = new Intent(context, TermDetail.class);
-                    intent.putExtra(Term.ID_KEY, current.getId());
+                    Intent intent = new Intent(context, CourseDetail.class);
+                    intent.putExtra(Course.ID_KEY, current.getId());
+                    intent.putExtra(Term.ID_KEY, current.getTermId_FK());
                     context.startActivity(intent);
 
                 }
@@ -55,35 +58,33 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     }
 
     // Constructor
-    public TermAdapter(Context context) {
+    public CourseAdapter(Context context) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public TermAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        System.out.println("onCreateViewHolder: " + parent + " " + viewType);
+    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.row_item, parent, false);
-        return new TermViewHolder(itemView);
+        return new CourseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TermViewHolder holder, int position) {
-        System.out.println("onBindViewHolder: " + holder + " " + position);
-        if(mTerms != null) {
-            Term current = mTerms.get(position);
+    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+        if(mCourses != null) {
+            Course current = mCourses.get(position);
             String title = current.getTitle();
-            holder.termItemView.setText(title);
+            holder.courseItemView.setText(title);
         } else {
-            holder.termItemView.setText("No term title");
+            holder.courseItemView.setText("No term title");
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mTerms != null) {
-            return mTerms.size();
+        if (mCourses != null) {
+            return mCourses.size();
         } else {
             return 0;
         }

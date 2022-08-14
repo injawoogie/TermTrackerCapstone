@@ -2,8 +2,10 @@ package com.example.termtracker.Database;
 
 import android.app.Application;
 
+import com.example.termtracker.DAO.AssessmentDao;
 import com.example.termtracker.DAO.CourseDao;
 import com.example.termtracker.DAO.TermDao;
+import com.example.termtracker.Entity.Assessment;
 import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 
@@ -15,10 +17,14 @@ public class Repository {
 
     private final TermDao mTermDAO;
     private final CourseDao mCourseDAO;
+    private final AssessmentDao mAssessmentDAO;
     private List<Term> mTerms;
     private List<Course> mCourses;
+    private List<Assessment> mAssessments;
     private Term mTerm;
     private Course mCourse;
+    private Assessment mAssessment;
+    private static final int DELAY = 250;
 
     // Make thread
     private static final int NUMBER_OF_THREADS = 4;
@@ -28,6 +34,7 @@ public class Repository {
         ProgramBuilder db = ProgramBuilder.getDatabase(application);
         mTermDAO = db.termDAO();
         mCourseDAO = db.courseDAO();
+        mAssessmentDAO = db.assessmentDao();
     }
 
     // TERM
@@ -36,22 +43,11 @@ public class Repository {
             mTerms = mTermDAO.getAll();
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
         return mTerms;
-    }
-
-    public void insert(Term term) {
-        databaseExecutor.execute(() -> {
-            mTermDAO.insert(term);
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-        }
     }
 
     public Term getTermByID(int id) {
@@ -59,22 +55,23 @@ public class Repository {
             mTerm = mTermDAO.getTermByID(id);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
         return mTerm;
     }
 
-    public void update(Term term) {
+    public void delete(Term term) {
         databaseExecutor.execute(() -> {
-            mTermDAO.update(term);
+            mTermDAO.delete(term);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
+
     }
 
     public void inOrUp(Term term) {
@@ -82,7 +79,56 @@ public class Repository {
             mTermDAO.inOrUp(term);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    // ASSESSMENT
+    public Assessment getAssessmentByID(int id) {
+        databaseExecutor.execute(() -> {
+            mAssessment = mAssessmentDAO.getAssessmentByID(id);
+        });
+        try {
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+        return mAssessment;
+    }
+
+    public List<Assessment> getAssessmentByCourseId(int courseId) {
+        databaseExecutor.execute(() -> {
+            mAssessments = mAssessmentDAO.getAssessmentsByCourseID(courseId);
+        });
+        try {
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+        return mAssessments;
+    }
+
+    public void inOrUp(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.inOrUp(assessment);
+        });
+        try {
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void delete(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.delete(assessment);
+        });
+        try {
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
@@ -91,40 +137,28 @@ public class Repository {
 
 
     // COURSE
-    public List<Course> getAllCourses() {
-        databaseExecutor.execute(() -> {
-            mCourses = mCourseDAO.getAll();
-        });
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException exception) {
-            exception.printStackTrace();
-        }
-        return mCourses;
-    }
-
     public Course getCourseByID(int id) {
         databaseExecutor.execute(() -> {
             mCourse = mCourseDAO.getCourseByID(id);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
         return mCourse;
     }
 
-
-    public void insert(Course course) {
+    public List<Course> getCoursesByTermID(int termId) {
         databaseExecutor.execute(() -> {
-            mCourseDAO.insert(course);
+            mCourses = mCourseDAO.getCoursesByTermID(termId);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
+        return mCourses;
 
     }
 
@@ -133,7 +167,19 @@ public class Repository {
             mCourseDAO.inOrUp(course);
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void delete(Course course) {
+        databaseExecutor.execute(() -> {
+            mCourseDAO.delete(course);
+        });
+        try {
+            Thread.sleep(DELAY);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
@@ -141,8 +187,16 @@ public class Repository {
     }
 
 
+    public List<Course> getAllCourses() {
+        databaseExecutor.execute(() -> {
+            mCourses = mCourseDAO.getAll();
+        });
+        try {
+            Thread.sleep(DELAY);
+        } catch (InterruptedException exception) {
+            exception.printStackTrace();
+        }
+        return mCourses;
 
-    // TODO: do delete, update
-
-
+    }
 }

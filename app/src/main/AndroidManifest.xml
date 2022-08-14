@@ -17,37 +17,34 @@
         <receiver
             android:name=".Helper.Noticeiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true"/>
 
         <activity
             android:name=".UI.CourseDetail"
             android:exported="false"
-            android:label="Course Details"
+            android:label="Course"
             android:parentActivityName=".UI.TermDetail"/>
         <activity
-            android:name=".UI.AssessmentList"
+            android:name=".UI.AssessmentDetail"
             android:exported="false"
-            android:label="Assessment List"
-            android:parentActivityName=".UI.TermDetail" />
+            android:label="Assessment"
+            android:parentActivityName=".UI.CourseDetail" />
         <activity
             android:name=".UI.TermDetail"
             android:exported="false"
-            android:label="Term Details"
+            android:label="Term"
             android:parentActivityName=".UI.TermList" />
         <activity
             android:name=".UI.TermList"
             android:exported="false"
-            android:label="Term List"
-            android:parentActivityName=".UI.Main" />
+            android:label="Terms" />
         <activity
             android:name=".UI.Main"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

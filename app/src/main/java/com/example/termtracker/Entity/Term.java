@@ -9,6 +9,9 @@ import java.util.Locale;
 @Entity(tableName = "term")
 public class Term {
 
+
+    public static final String ID_KEY = "term_key";
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;
@@ -21,13 +24,14 @@ public class Term {
         this.endDate = endDate;
     }
 
+    public Term() {
+    }
+
     @NonNull
     @Override
     public String toString() {
-//        return super.toString();
-        return String.format(Locale.ENGLISH, "Term ID: %d, Title: %s", id, title);
+        return String.format(Locale.US, "Term ID: %d, Title: %s", id, title);
     }
-
 
     public int getId() {
         return id;

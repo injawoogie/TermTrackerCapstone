@@ -1,16 +1,23 @@
 package com.example.termtracker.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.termtracker.Database.Repository;
+import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 import com.example.termtracker.Helper.DaPicker;
 import com.example.termtracker.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TermDetail extends AppCompatActivity {
 
@@ -18,21 +25,54 @@ public class TermDetail extends AppCompatActivity {
     EditText termTitleEditText;
     EditText termStartEditText;
     EditText termEndEditText;
+    TextView courseListTextView;
+    RecyclerView courseRecyclerView;
+    FloatingActionButton addTermButton;
 
-    int termId;
-    String termTitle;
-    String termStart;
-    String termEnd;
+    boolean isNewTerm = false;
+    Term term;
     Repository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_detail);
+
         initializeRepo();
         initializeView();
-        getValuesFromView();
+        getTermAttributesFromIntent();
+        setTextForViews();
+        readElements();
+        createRecycler();
 
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_term_detail, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+
+
+
+                toTermsList();
+                return true;
+
+            case R.id.deleteTerm:
+
+                repo.delete(term);
+                toTermsList();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initializeRepo() {
@@ -41,18 +81,18 @@ public class TermDetail extends AppCompatActivity {
 
     private void initializeView() {
 
+        addTermButton = findViewById(R.id.floatingActionButton);
+        courseRecyclerView = findViewById(R.id.courseRecyclerView);
+        courseListTextView = findViewById(R.id.termDetailCourseListTextView);
+
         termIdEditText = findViewById(R.id.termiDEditText);
-        termIdEditText.setText(String.valueOf(getIntent().getIntExtra("id", -1)));
         termIdEditText.setEnabled(false);
 
         termTitleEditText = findViewById(R.id.termTitleEditText);
-        termTitleEditText.setText(getIntent().getStringExtra("title"));
 
         termStartEditText = findViewById(R.id.termStartDateEditText);
-        termStartEditText.setText(getIntent().getStringExtra("startDate"));
 
         termEndEditText = findViewById(R.id.termEndDateEditText);
-        termEndEditText.setText(getIntent().getStringExtra("endDate"));
 
         DaPicker startPicker = new DaPicker(TermDetail.this, termStartEditText);
         startPicker.activate();
@@ -60,41 +100,67 @@ public class TermDetail extends AppCompatActivity {
         DaPicker endPicker = new DaPicker(TermDetail.this, termEndEditText);
         endPicker.activate();
 
+    }
+
+    private void getTermAttributesFromIntent() {
+
+        term = repo.getTermByID(getIntent().getIntExtra(Term.ID_KEY, -1));
+        if(term == null) {
+            term = new Term();
+            isNewTerm = true;
+        }
 
     }
 
-    private void getValuesFromView() {
+    private void setTextForViews() {
 
-        termId = Integer.parseInt(String.valueOf(termIdEditText.getText()));
-        termTitle = String.valueOf(termTitleEditText.getText());
-        termStart = String.valueOf(termStartEditText.getText());
-        termEnd = String.valueOf(termEndEditText.getText());
+        termIdEditText.setText(String.valueOf(term.getId()));
+        termTitleEditText.setText(term.getTitle());
+        termStartEditText.setText(term.getStartDate());
+        termEndEditText.setText(term.getEndDate());
+
+        if (isNewTerm) {
+            addTermButton.hide();
+            courseListTextView.setVisibility(View.INVISIBLE);
+            termIdEditText.setText(R.string.auto_generated);
+        }
+    }
+
+    private void readElements() {
+
+        term.setTitle(String.valueOf(termTitleEditText.getText()));
+        term.setStartDate(String.valueOf(termStartEditText.getText()));
+        term.setEndDate(String.valueOf(termEndEditText.getText()));
 
     }
 
     public void saveButton(View view) {
-        getValuesFromView();
 
-        Term term = repo.getTermByID(termId);
-
-        // if term from db returns null make a new term.
-        if (term == null) {
-            term = new Term(termTitle, termStart, termEnd);
-            System.out.println(term);
-
-        // if term from db exists, update the term
-        } else {
-            term.setTitle(termTitle);
-            term.setStartDate(termStart);
-            term.setEndDate(termEnd);
-            System.out.println(term);
-        }
+        readElements();
         repo.inOrUp(term);
-        this.finish();
+        toTermsList();
     }
 
-    public void toCourseDetail(View view) {
+    private void createRecycler() {
+        RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
+        Repository repo = new Repository(getApplication());
+
+        final CourseAdapter cAdapter = new CourseAdapter(this);
+        recyclerView.setAdapter(cAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cAdapter.setCourses(repo.getCoursesByTermID(term.getId()));
+
+    }
+
+    public void addNewCourse(View view) {
         Intent intent = new Intent(TermDetail.this, CourseDetail.class);
+        intent.putExtra(Term.ID_KEY, term.getId());
         startActivity(intent);
     }
+
+    private void toTermsList() {
+        this.startActivity(new Intent(this, TermList.class));
+    }
+
+
 }

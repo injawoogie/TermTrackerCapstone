@@ -8,10 +8,13 @@
     >
 
     <TextView
-        android:id="@+id/courseItemTextView"
+        android:id="@+id/itemTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:textSize="20sp"
         android:background="@color/purple_200"
         tools:layout_editor_absoluteX="190dp"
         tools:layout_editor_absoluteY="230dp"

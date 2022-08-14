@@ -6,112 +6,174 @@
     android:layout_height="match_parent"
     tools:context=".UI.CourseDetail">
 
-    <ScrollView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_margin="20dp"
+        android:onClick="newAssessment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add"/>
+
+    <LinearLayout
+        android:id="@+id/linTop1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_editor_absoluteX="1dp"
         app:layout_editor_absoluteY="1dp"
         tools:layout_editor_absoluteX="0dp">
 
-        <LinearLayout
+
+        <ScrollView
+            android:id="@+id/assessmentDetailScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="200dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_editor_absoluteX="1dp"
             app:layout_editor_absoluteY="1dp"
-            tools:layout_editor_absoluteX="1dp">
+            tools:layout_editor_absoluteX="0dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Course Title" />
-
-            <EditText
-                android:id="@+id/courseNameEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Course Name" />
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_editor_absoluteX="1dp"
+                app:layout_editor_absoluteY="1dp"
+                tools:layout_editor_absoluteX="1dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start Date:" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Course Title" />
 
-            <EditText
-                android:id="@+id/courseStartDateEditText"
+                <EditText
+                    android:id="@+id/courseNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Course Name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Date:" />
+
+                <EditText
+                    android:id="@+id/courseStartDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date_hint" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End Date:" />
+
+                <EditText
+                    android:id="@+id/courseEndDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date_hint" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status:" />
+
+                <Spinner
+                    android:id="@+id/courseStatusSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:hint="@string/selection_required" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instructor Name:" />
+
+                <EditText
+                    android:id="@+id/courseInstructorNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Professor Jim" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instructor Email:" />
+
+                <EditText
+                    android:id="@+id/courseInstructorEmailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="profjim@wgu.edu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes:" />
+
+                <EditText
+                    android:id="@+id/courseNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:hint="optional notes"
+                    android:textAlignment="viewStart"/>
+
+                <Button
+                    android:id="@+id/courseSaveButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save Course"
+                    android:onClick="saveButton"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_editor_absoluteX="1dp"
+        app:layout_editor_absoluteY="1dp"
+        app:layout_constraintTop_toBottomOf="@id/linTop1"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/termDetailCourseListTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="@string/assessments"
+            app:layout_constraintTop_toBottomOf="@id/assessmentDetailScrollView"/>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/assessmentDetailScrollView"
+            app:layout_editor_absoluteX="1dp"
+            app:layout_editor_absoluteY="1dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assessmentRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/date_hint" />
+                tools:layout_editor_absoluteX="1dp"
+                tools:layout_editor_absoluteY="1dp"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End Date:" />
-
-            <EditText
-                android:id="@+id/courseEndDateEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/date_hint" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status:" />
-
-            <Spinner
-                android:id="@+id/courseStatusSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
-                android:hint="in progress" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Instructor Name:" />
-
-            <EditText
-                android:id="@+id/courseInstructorNameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Professor Jim" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Instructor Email:" />
-
-            <EditText
-                android:id="@+id/courseInstructorEmailEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="profjim@wgu.edu" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Notes:" />
-
-            <EditText
-                android:id="@+id/courseNotesEditText"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:hint="optional notes"
-                android:textAlignment="viewStart"/>
-
-            <Button
-                android:id="@+id/courseSaveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:onClick="saveButton"/>
-
-        </LinearLayout>
-
-    </ScrollView>
-
+        </ScrollView>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

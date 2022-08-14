@@ -3,26 +3,23 @@ package com.example.termtracker.Entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import java.time.LocalDate;
 
 @Entity(tableName = "course",
         foreignKeys = @ForeignKey(
                 entity = Term.class,
                 parentColumns = "id",
-                childColumns = "termIdFK",
+                childColumns = "termId_FK",
                 onDelete = ForeignKey.CASCADE
         ))
 public class Course {
 
-    // Status options (in progress, completed, dropped, plan to take)
+    public static final String ID_KEY = "course_key";
     public static final String IN_PROGRESS = "in progress";
     public static final String COMPLETED = "completed";
     public static final String DROPPED = "dropped";
     public static final String PLAN_TO_TAKE = "plan to take";
-    public static final String[] statusAll = new String[] {IN_PROGRESS, COMPLETED, DROPPED, PLAN_TO_TAKE};
+    public static final String[] STATUS_ALL = new String[] {IN_PROGRESS, COMPLETED, DROPPED, PLAN_TO_TAKE};
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -33,7 +30,7 @@ public class Course {
     private String instructorName;
     private String instructorEmail;
     private String note;
-    private int termIdFK;
+    private int termId_FK;
 
     public Course(String title, String instructorName, String instructorEmail, String startDate, String endDate, String status, String note, int termIdFK) {
         this.title = title;
@@ -43,7 +40,12 @@ public class Course {
         this.endDate = endDate;
         this.status = status;
         this.note = note;
-        this.termIdFK = termIdFK;
+        this.termId_FK = termIdFK;
+
+    }
+
+    public Course() {
+
     }
 
     @NonNull
@@ -116,11 +118,11 @@ public class Course {
         this.instructorEmail = instructorEmail;
     }
 
-    public int getTermIdFK() {
-        return termIdFK;
+    public int getTermId_FK() {
+        return termId_FK;
     }
 
-    public void setTermIdFK(int termIdFK) {
-        this.termIdFK = termIdFK;
+    public void setTermId_FK(int termId_FK) {
+        this.termId_FK = termId_FK;
     }
 }

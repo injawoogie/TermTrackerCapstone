@@ -1,6 +1,8 @@
 package com.example.termtracker.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -16,6 +18,7 @@ import android.widget.Spinner;
 
 import com.example.termtracker.Database.Repository;
 import com.example.termtracker.Entity.Course;
+import com.example.termtracker.Entity.Term;
 import com.example.termtracker.Helper.DaPicker;
 import com.example.termtracker.Helper.Noticeiver;
 import com.example.termtracker.Helper.Utility;
@@ -23,6 +26,7 @@ import com.example.termtracker.R;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 
 public class CourseDetail extends AppCompatActivity {
 
@@ -36,13 +40,9 @@ public class CourseDetail extends AppCompatActivity {
     EditText instructorEmailEditText;
     EditText notesEditText;
 
-    String title;
-    String start;
-    String end;
-    String status;
-    String name;
-    String email;
-    String notes;
+    boolean isNewCourse = false;
+    Course course;
+    Term term;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,10 @@ public class CourseDetail extends AppCompatActivity {
 
         initializeRepo();
         initializeView();
-        getValuesFromView();
+        getCourseAttributesFromIntent();
+        setTextForViews();
+        readElements();
+        createRecycler();
 
     }
 
@@ -66,7 +69,9 @@ public class CourseDetail extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                this.finish();
+                System.out.println("home selected in course detail");
+
+                backToTermDetail();
                 return true;
             case R.id.share:
 
@@ -106,7 +111,10 @@ public class CourseDetail extends AppCompatActivity {
 
                 return true;
 
-
+            case R.id.deleteCourse:
+                repo.delete(course);
+                backToTermDetail();
+                return true;
 
         }
 
@@ -118,71 +126,95 @@ public class CourseDetail extends AppCompatActivity {
     }
 
     private void initializeView() {
-        courseTitleEditText = findViewById(R.id.courseNameEditText);
-//        courseTitleEditText.setText(getIntent().getStringExtra("name"));
 
+        courseTitleEditText = findViewById(R.id.courseNameEditText);
         courseStartEditText = findViewById(R.id.courseStartDateEditText);
-//        courseStartEditText.setText(getIntent().getStringExtra("startDate"));
+        courseEndEditText = findViewById(R.id.courseEndDateEditText);
+        statusSpinner = findViewById(R.id.courseStatusSpinner);
+        instructorNameEditText = findViewById(R.id.courseInstructorNameEditText);
+        instructorEmailEditText = findViewById(R.id.courseInstructorEmailEditText);
+        notesEditText = findViewById(R.id.courseNotesEditText);
+
+    }
+
+    private void getCourseAttributesFromIntent() {
+
+        course = repo.getCourseByID(getIntent().getIntExtra(Course.ID_KEY, -1));
+        if(course == null) {
+            course = new Course();
+            isNewCourse = true;
+
+        }
+        term = repo.getTermByID(getIntent().getIntExtra(Term.ID_KEY, -1));
+        course.setTermId_FK(term.getId());
+        System.out.println(String.format(Locale.US, "cid: %d, tid: %d", course.getId(), course.getTermId_FK()));
+
+    }
+
+    private void setTextForViews() {
+
+        courseTitleEditText.setText(course.getTitle());
+        courseStartEditText.setText(course.getStartDate());
+        courseEndEditText.setText(course.getEndDate());
+
         DaPicker startPicker = new DaPicker(CourseDetail.this, courseStartEditText);
         startPicker.activate();
-
-        courseEndEditText = findViewById(R.id.courseEndDateEditText);
-//        courseEndEditText.setText(getIntent().getStringExtra("endDate"));
         DaPicker endPicker = new DaPicker(CourseDetail.this, courseEndEditText);
         endPicker.activate();
 
-        statusSpinner = findViewById(R.id.courseStatusSpinner);
-
-        ArrayAdapter<String>adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Course.statusAll);
+        ArrayAdapter<String>adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Course.STATUS_ALL);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         statusSpinner.setAdapter(adapter);
-//        status = getIntent().getStringExtra("status");
-        int pos = adapter.getPosition("dropped");
+        int pos = adapter.getPosition(course.getStatus());
         statusSpinner.setSelection(pos, true);
+        instructorNameEditText.setText(course.getInstructorName());
+        instructorEmailEditText.setText(course.getInstructorEmail());
+        notesEditText.setText(course.getNote());
 
-        instructorNameEditText = findViewById(R.id.courseInstructorNameEditText);
-
-        instructorEmailEditText = findViewById(R.id.courseInstructorEmailEditText);
-
-        notesEditText = findViewById(R.id.courseNotesEditText);
     }
 
-    private void getValuesFromView() {
+    private void readElements() {
 
-        title = String.valueOf(courseTitleEditText.getText());
-        start = String.valueOf(courseStartEditText.getText());
-        end = String.valueOf(courseEndEditText.getText());
-        name = String.valueOf(instructorNameEditText.getText());
-        email = String.valueOf(instructorEmailEditText.getText());
-        notes = String.valueOf(notesEditText.getText());
-        status = statusSpinner.toString();
+        course.setTitle(String.valueOf(courseTitleEditText.getText()));
+        course.setStartDate(String.valueOf(courseStartEditText.getText()));
+        course.setEndDate(String.valueOf(courseEndEditText.getText()));
+        course.setStatus(statusSpinner.getSelectedItem().toString());
+        course.setNote(String.valueOf(notesEditText.getText()));
+        course.setInstructorName(String.valueOf(instructorNameEditText.getText()));
+        course.setInstructorEmail(String.valueOf(instructorEmailEditText.getText()));
 
     }
 
     public void saveButton(View view) {
 
-        getValuesFromView();
-        int id = 1;
-        Course course = repo.getCourseByID(id);
-
-        if (course == null) {
-
-            course = new Course(title,name,email,start,end,status,notes,id);
-
-        } else {
-
-            course.setTitle(title);
-            course.setStartDate(start);
-            course.setEndDate(end);
-            course.setInstructorName(name);
-            course.setInstructorEmail(email);
-            course.setNote(notes);
-            course.setTermIdFK(id);
-        }
-
+        // go back to term detail for term id.
+        readElements();
         repo.inOrUp(course);
-        this.finish();
+        backToTermDetail();
+    }
+
+    private void createRecycler() {
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
+        Repository repo = new Repository(getApplication());
+
+        final AssessmentAdapter aAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(aAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        aAdapter.setAssessments(repo.getAssessmentByCourseId(course.getId()));
 
     }
+
+    private void backToTermDetail() {
+        Intent intent = new Intent(this, TermDetail.class);
+        intent.putExtra(Term.ID_KEY, course.getTermId_FK());
+        this.startActivity(intent);
+    }
+
+    public void newAssessment(View view) {
+        Intent intent = new Intent(this, AssessmentDetail.class);
+        intent.putExtra(Course.ID_KEY, course.getId());
+        this.startActivity(intent);
+    }
+
 }

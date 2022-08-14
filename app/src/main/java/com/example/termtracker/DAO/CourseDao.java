@@ -42,4 +42,6 @@ public interface CourseDao {
         }
     }
 
+    @Query("select * from course where termId_FK = :termId")
+    List<Course> getCoursesByTermID(int termId);
 }

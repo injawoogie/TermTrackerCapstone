@@ -3,13 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/share"
-        android:title="@string/menu_item_name__share_notes" />
-    <item
         android:id="@+id/notify"
         android:title="@string/menu_item_name__notify" />
     <item
-        android:id="@+id/deleteCourse"
+        android:id="@+id/deleteAssessment"
         android:title="@string/delete" />
 
 </menu>
