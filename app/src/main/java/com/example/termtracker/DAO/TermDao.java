@@ -23,8 +23,8 @@ public interface TermDao {
     @Delete
     void delete(Term term);
 
-    @Query("select * from term order by id asc")
-    List<Term> getAll();
+    @Query("select * from term where userId_FK = :userId order by id asc")
+    List<Term> getAllUserTerms(int userId);
 
     @Query("select * from term where id = :id limit 1")
     Term getTermByID(int id);
@@ -32,11 +32,11 @@ public interface TermDao {
     default void inOrUp(Term term) {
         Term found = getTermByID(term.getId());
         if (found == null) {
-            System.out.println("Term not found.");
+            System.out.println("Term not found. Inserting new.");
             insert(term);
 
         } else {
-            System.out.println("Term found");
+            System.out.println("Term found. Updating.");
             update(term);
         }
     }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.termtracker.Entity.Assessment;
 import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 import com.example.termtracker.R;
@@ -37,21 +36,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             courseItemView =itemView.findViewById(R.id.itemTextView);
 
             // TODO: Make lambda
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(view -> {
 
-                @Override
-                public void onClick(View view) {
+                int position = getAdapterPosition();
+                final Course current = mCourses.get(position);
 
-                    int position = getAdapterPosition();
-                    final Course current = mCourses.get(position);
+                // Prepare information for next activity
+                Intent intent = new Intent(context, CourseDetail.class);
+                intent.putExtra(Course.ID_KEY, current.getId());
+                intent.putExtra(Term.ID_KEY, current.getTermId_FK());
+                context.startActivity(intent);
 
-                    // Prepare information for next activity
-                    Intent intent = new Intent(context, CourseDetail.class);
-                    intent.putExtra(Course.ID_KEY, current.getId());
-                    intent.putExtra(Term.ID_KEY, current.getTermId_FK());
-                    context.startActivity(intent);
-
-                }
             });
 
         }

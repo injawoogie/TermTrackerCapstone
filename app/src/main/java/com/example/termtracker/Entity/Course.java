@@ -5,12 +5,16 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.example.termtracker.Helper.Utility;
+
+import java.time.LocalDate;
+
 @Entity(tableName = "course",
         foreignKeys = @ForeignKey(
                 entity = Term.class,
                 parentColumns = "id",
                 childColumns = "termId_FK",
-                onDelete = ForeignKey.CASCADE
+                onDelete = ForeignKey.RESTRICT
         ))
 public class Course {
 
@@ -29,13 +33,15 @@ public class Course {
     private String status;
     private String instructorName;
     private String instructorEmail;
+    private String instructorPhone;
     private String note;
     private int termId_FK;
 
-    public Course(String title, String instructorName, String instructorEmail, String startDate, String endDate, String status, String note, int termIdFK) {
+    public Course(String title, String instructorName, String instructorEmail, String instructorPhone, String startDate, String endDate, String status, String note, int termIdFK) {
         this.title = title;
         this.instructorName = instructorName;
         this.instructorEmail = instructorEmail;
+        this. instructorPhone = instructorPhone;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
@@ -45,13 +51,9 @@ public class Course {
     }
 
     public Course() {
+        this.startDate = Utility.localDateToString(LocalDate.now());
+        this.endDate = Utility.localDateToString(LocalDate.now().plusDays(15));
 
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return super.toString();
     }
 
     public int getId() {
@@ -116,6 +118,14 @@ public class Course {
 
     public void setInstructorEmail(String instructorEmail) {
         this.instructorEmail = instructorEmail;
+    }
+
+    public String getInstructorPhone() {
+        return instructorPhone;
+    }
+
+    public void setInstructorPhone(String instructorPhone) {
+        this.instructorPhone = instructorPhone;
     }
 
     public int getTermId_FK() {

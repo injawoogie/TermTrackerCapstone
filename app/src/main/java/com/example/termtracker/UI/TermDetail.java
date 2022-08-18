@@ -13,9 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.termtracker.Database.Repository;
-import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
+import com.example.termtracker.Entity.User;
 import com.example.termtracker.Helper.DaPicker;
+import com.example.termtracker.Helper.Notify;
 import com.example.termtracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -31,6 +32,7 @@ public class TermDetail extends AppCompatActivity {
 
     boolean isNewTerm = false;
     Term term;
+    User user;
     Repository repo;
 
     @Override
@@ -59,15 +61,21 @@ public class TermDetail extends AppCompatActivity {
 
             case android.R.id.home:
 
-
-
                 toTermsList();
                 return true;
 
             case R.id.deleteTerm:
+                if(repo.getCoursesByTermID(term.getId()).isEmpty()) {
+                    repo.delete(term);
+                    toTermsList();
+                } else {
+                    Notify.show(this, "Please delete all courses for this term.");
+                }
 
-                repo.delete(term);
-                toTermsList();
+                return true;
+
+            case R.id.logout:
+                startActivity(new Intent(this, Login.class));
                 return true;
 
         }
@@ -105,8 +113,11 @@ public class TermDetail extends AppCompatActivity {
     private void getTermAttributesFromIntent() {
 
         term = repo.getTermByID(getIntent().getIntExtra(Term.ID_KEY, -1));
+        user = repo.getUserById(getIntent().getIntExtra(User.ID_KEY, -1));
+
         if(term == null) {
             term = new Term();
+            term.setUserId_FK(user.getId());
             isNewTerm = true;
         }
 
@@ -159,7 +170,9 @@ public class TermDetail extends AppCompatActivity {
     }
 
     private void toTermsList() {
-        this.startActivity(new Intent(this, TermList.class));
+        Intent intent = new Intent(this, TermList.class);
+        intent.putExtra(User.ID_KEY, user.getId());
+        this.startActivity(intent);
     }
 
 

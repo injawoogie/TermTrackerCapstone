@@ -1,8 +1,5 @@
 package com.example.termtracker.UI;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,12 +16,10 @@ import com.example.termtracker.Entity.Assessment;
 import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
 import com.example.termtracker.Helper.DaPicker;
-import com.example.termtracker.Helper.Noticeiver;
-import com.example.termtracker.Helper.Utility;
+import com.example.termtracker.Helper.Notify;
 import com.example.termtracker.R;
 
-import java.text.ParseException;
-import java.util.Date;
+import java.util.Locale;
 
 public class AssessmentDetail extends AppCompatActivity {
 
@@ -64,38 +59,28 @@ public class AssessmentDetail extends AppCompatActivity {
 
             case android.R.id.home:
                 System.out.println("home selected in assessment detail");
-
                 goToCourseDetail();
                 return true;
-
             case R.id.notify:
 
                 String date = assessmentStartEditText.getText().toString();
-                Date myDate = null;
-                try {
-                    myDate = Utility.SIMPLE_DATE_FORMAT.parse(date);
+                String startDate = assessmentStartEditText.getText().toString();
+                String startMsg = String.format(Locale.US, "Assessment: %s starts today, %s", assessment.getTitle(), startDate);
+                Notify.run(this, startDate, startMsg);
 
-                } catch (ParseException exception) {
-                    exception.printStackTrace();
-                }
-
-                long trigger = myDate.getTime();
-                Intent intent = new Intent(AssessmentDetail.this, Noticeiver.class);
-                intent.putExtra(Noticeiver.CONTENT_KEY, "Course starts today!");
-
-                PendingIntent pIntent = PendingIntent.getBroadcast(AssessmentDetail.this,
-                        Main.alertNum++,
-                        intent,
-                        PendingIntent.FLAG_IMMUTABLE);
-
-                AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, trigger, pIntent);
+                String endDate = assessmentEndEditText.getText().toString();
+                String endMsg = String.format("Assessment: %s ends today, %s", assessment.getTitle(), endDate);
+                Notify.run(this, endDate, endMsg);
 
                 return true;
 
             case R.id.deleteAssessment:
                 repo.delete(assessment);
                 goToCourseDetail();
+                return true;
+
+            case R.id.logout:
+                startActivity(new Intent(this, Login.class));
                 return true;
 
         }

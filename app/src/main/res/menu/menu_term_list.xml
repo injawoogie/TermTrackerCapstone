@@ -3,13 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/notify"
-        android:title="@string/menu_item_name__notify" />
-    <item
-        android:id="@+id/deleteAssessment"
-        android:title="@string/delete" />
-    <item
         android:id="@+id/logout"
         android:title="@string/log_out" />
-
 </menu>

@@ -32,11 +32,11 @@ public interface AssessmentDao {
     default void inOrUp(Assessment assessment) {
         Assessment found = getAssessmentByID(assessment.getId());
         if (found == null) {
-            System.out.println("Assessment not found.");
+            System.out.println("Assessment not found. Inserting new.");
             insert(assessment);
 
         } else {
-            System.out.println("Assessment found");
+            System.out.println("Assessment found. Updating.");
             update(assessment);
         }
     }

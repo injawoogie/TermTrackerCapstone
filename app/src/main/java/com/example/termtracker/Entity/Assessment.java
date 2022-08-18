@@ -4,6 +4,10 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.example.termtracker.Helper.Utility;
+
+import java.time.LocalDate;
+
 @Entity(tableName = "assessment",
         foreignKeys = @ForeignKey(
                 entity = Course.class,
@@ -37,6 +41,9 @@ public class Assessment {
     }
 
     public Assessment() {
+        this.startDate = Utility.localDateToString(LocalDate.now());
+        this.endDate = Utility.localDateToString(LocalDate.now().plusDays(15));
+
     }
 
     public int getId() {

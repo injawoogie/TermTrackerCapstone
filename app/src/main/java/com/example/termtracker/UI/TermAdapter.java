@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.termtracker.Entity.Term;
+import com.example.termtracker.Entity.User;
 import com.example.termtracker.R;
 
 import java.util.List;
@@ -35,20 +36,17 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
             termItemView=itemView.findViewById(R.id.itemTextView);
 
             // TODO: Make lambda
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(view -> {
 
-                @Override
-                public void onClick(View view) {
-                    
-                    int position = getAdapterPosition();
-                    final Term current = mTerms.get(position);
+                int position = getAdapterPosition();
+                final Term current = mTerms.get(position);
 
-                    // Prepare information for next activity
-                    Intent intent = new Intent(context, TermDetail.class);
-                    intent.putExtra(Term.ID_KEY, current.getId());
-                    context.startActivity(intent);
+                // Prepare information for next activity
+                Intent intent = new Intent(context, TermDetail.class);
+                intent.putExtra(Term.ID_KEY, current.getId());
+                intent.putExtra(User.ID_KEY, current.getUserId_FK());
+                context.startActivity(intent);
 
-                }
             });
 
         }

@@ -4,9 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,13 +16,11 @@ import android.widget.Spinner;
 import com.example.termtracker.Database.Repository;
 import com.example.termtracker.Entity.Course;
 import com.example.termtracker.Entity.Term;
+import com.example.termtracker.Entity.User;
 import com.example.termtracker.Helper.DaPicker;
-import com.example.termtracker.Helper.Noticeiver;
-import com.example.termtracker.Helper.Utility;
+import com.example.termtracker.Helper.Notify;
 import com.example.termtracker.R;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.Locale;
 
 public class CourseDetail extends AppCompatActivity {
@@ -37,12 +32,14 @@ public class CourseDetail extends AppCompatActivity {
     EditText courseEndEditText;
     Spinner statusSpinner;
     EditText instructorNameEditText;
+    EditText instructorPhoneEditText;
     EditText instructorEmailEditText;
     EditText notesEditText;
 
     boolean isNewCourse = false;
     Course course;
     Term term;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +74,22 @@ public class CourseDetail extends AppCompatActivity {
 
                 Intent sIntent = new Intent();
                 sIntent.setAction(Intent.ACTION_SEND);
-                sIntent.putExtra(Intent.EXTRA_TEXT, "Text extra");
-                sIntent.putExtra(Intent.EXTRA_TITLE, "Text Title");
+
+
+                String msgTitle = String.format(Locale.US, "TermTracker %s Notes", course.getTitle());
+
+
+                String msg = String.format(Locale.US,
+                        "Check out my Course Detail notes from TextTracker.\n\n%s\n",course.getTitle());
+
+                if (course.getNote()!=null) {
+                    msg = msg + String.format("%s", course.getNote());
+                } else {
+                    msg = msg + "There are no notes.";
+                }
+
+                sIntent.putExtra(Intent.EXTRA_TEXT, msg);
+                sIntent.putExtra(Intent.EXTRA_TITLE, msgTitle);
                 sIntent.setType("text/plain");
 
                 Intent cIntent = Intent.createChooser(sIntent, null);
@@ -88,32 +99,23 @@ public class CourseDetail extends AppCompatActivity {
 
             case R.id.notify:
 
-                String date = courseStartEditText.getText().toString();
-                Date myDate = null;
-                try {
-                    myDate = Utility.SIMPLE_DATE_FORMAT.parse(date);
+                String startDate = courseStartEditText.getText().toString();
+                String startMsg = String.format(Locale.US, "Course: %s starts today, %s", course.getTitle(), startDate);
+                Notify.run(this, startDate, startMsg);
 
-                } catch (ParseException exception) {
-                    exception.printStackTrace();
-                }
-
-                long trigger = myDate.getTime();
-                Intent intent = new Intent(CourseDetail.this, Noticeiver.class);
-                intent.putExtra(Noticeiver.CONTENT_KEY, "Course starts today!");
-
-                PendingIntent pIntent = PendingIntent.getBroadcast(CourseDetail.this,
-                        Main.alertNum++,
-                        intent,
-                        PendingIntent.FLAG_IMMUTABLE);
-
-                AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                manager.set(AlarmManager.RTC_WAKEUP, trigger, pIntent);
+                String endDate = courseEndEditText.getText().toString();
+                String endMsg = String.format("Course: %s ends today, %s", course.getTitle(), endDate);
+                Notify.run(this, endDate, endMsg);
 
                 return true;
 
             case R.id.deleteCourse:
                 repo.delete(course);
                 backToTermDetail();
+                return true;
+
+            case R.id.logout:
+                startActivity(new Intent(this, Login.class));
                 return true;
 
         }
@@ -133,6 +135,7 @@ public class CourseDetail extends AppCompatActivity {
         statusSpinner = findViewById(R.id.courseStatusSpinner);
         instructorNameEditText = findViewById(R.id.courseInstructorNameEditText);
         instructorEmailEditText = findViewById(R.id.courseInstructorEmailEditText);
+        instructorPhoneEditText = findViewById(R.id.courseInstructorPhoneEditText);
         notesEditText = findViewById(R.id.courseNotesEditText);
 
     }
@@ -146,8 +149,9 @@ public class CourseDetail extends AppCompatActivity {
 
         }
         term = repo.getTermByID(getIntent().getIntExtra(Term.ID_KEY, -1));
+        user = repo.getUserById(term.getUserId_FK());
         course.setTermId_FK(term.getId());
-        System.out.println(String.format(Locale.US, "cid: %d, tid: %d", course.getId(), course.getTermId_FK()));
+        System.out.printf(Locale.US, "cid: %d, tid: %d%n", course.getId(), course.getTermId_FK());
 
     }
 
@@ -169,6 +173,7 @@ public class CourseDetail extends AppCompatActivity {
         int pos = adapter.getPosition(course.getStatus());
         statusSpinner.setSelection(pos, true);
         instructorNameEditText.setText(course.getInstructorName());
+        instructorPhoneEditText.setText(course.getInstructorPhone());
         instructorEmailEditText.setText(course.getInstructorEmail());
         notesEditText.setText(course.getNote());
 
@@ -182,6 +187,7 @@ public class CourseDetail extends AppCompatActivity {
         course.setStatus(statusSpinner.getSelectedItem().toString());
         course.setNote(String.valueOf(notesEditText.getText()));
         course.setInstructorName(String.valueOf(instructorNameEditText.getText()));
+        course.setInstructorPhone(String.valueOf(instructorPhoneEditText.getText()));
         course.setInstructorEmail(String.valueOf(instructorEmailEditText.getText()));
 
     }
@@ -208,6 +214,7 @@ public class CourseDetail extends AppCompatActivity {
     private void backToTermDetail() {
         Intent intent = new Intent(this, TermDetail.class);
         intent.putExtra(Term.ID_KEY, course.getTermId_FK());
+        intent.putExtra(User.ID_KEY, term.getUserId_FK());
         this.startActivity(intent);
     }
 

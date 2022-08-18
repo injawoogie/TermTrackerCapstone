@@ -2,12 +2,9 @@ package com.example.termtracker.Helper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.Locale;
 
 public class Utility {
@@ -21,6 +18,10 @@ public class Utility {
 
     public static LocalDate stringToLocalDate(String str) {
         return LocalDate.parse(str, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    public static long getEpochSecondsUTC() {
+        return ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).toEpochSecond();
     }
 
 }

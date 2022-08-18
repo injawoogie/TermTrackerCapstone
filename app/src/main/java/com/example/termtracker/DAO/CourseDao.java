@@ -8,7 +8,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.termtracker.Entity.Course;
-import com.example.termtracker.Entity.Term;
 
 import java.util.List;
 
@@ -33,11 +32,11 @@ public interface CourseDao {
     default void inOrUp(Course course) {
         Course found = getCourseByID(course.getId());
         if (found == null) {
-            System.out.println("Course not found.");
+            System.out.println("Course not found. Inserting new.");
             insert(course);
 
         } else {
-            System.out.println("Course found");
+            System.out.println("Course found. Updating.");
             update(course);
         }
     }
